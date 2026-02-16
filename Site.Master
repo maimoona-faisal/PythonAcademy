@@ -1,0 +1,110 @@
+﻿<%@ Master Language="C#" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+        <asp:ContentPlaceHolder ID="TitleContent" runat="server" /> - Python Academy
+    </title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Main.css") %>" />
+
+    <!-- (Optional) internal CSS proof for assignment -->
+    <style>
+        .role-pill { border-radius: 999px; padding: 6px 10px; font-size: .85rem; }
+    </style>
+
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+
+<body>
+<form id="form1" runat="server">
+
+<%
+    // UI-only: read session (login logic stays in Login/Register pages)
+    string role = Session["Role"] as string;   // "Lecturer" / "Student" / "Admin" / null
+    string name = Session["Name"] as string;
+    bool loggedIn = !string.IsNullOrWhiteSpace(role);
+%>
+
+<div class="page">
+
+    <!-- HEADER -->
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <a runat="server" href="~/Default.aspx" class="brand">
+                <!--  -->
+                <img src="<%= ResolveUrl("~/Uploads/Python Academy Logo.png") %>"
+                     alt="Python Academy Logo"
+                     class="brand-logo" />
+                <div class="brand-text">
+                    <div class="brand-title">Python Academy</div>
+                    <div class="brand-subtitle">Python Learning Resources Platform</div>
+                </div>
+            </a>
+
+            <!--  -->
+            <div class="topbar-actions">
+                <a class="btn btn-outline" runat="server" href="~/Auth/Logout.aspx">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAV (role-based, but no login/register here) -->
+    <nav class="navbar">
+        <div class="container nav-inner">
+
+            <!-- Common links -->
+            <a runat="server" href="~/Default.aspx" class="nav-link">Home</a>
+            <a runat="server" href="~/Public/Resources.aspx" class="nav-link">Browse Resources</a>
+            <a runat="server" href="~/About.aspx" class="nav-link">About</a>
+
+            <% if (role == "Lecturer") { %>
+                <span class="nav-divider"></span>
+                <a runat="server" href="~/l_dashboard.aspx" class="nav-link">Dashboard</a>
+                <a runat="server" href="~UploadContent.aspx" class="nav-link">Upload</a>
+                <a runat="server" href="~CreateQuiz.aspx" class="nav-link">Create Quiz/Exam</a>
+                <a runat="server" href="~Grade.aspx" class="nav-link">Grade</a>
+                <a runat="server" href="~Feedback.aspx" class="nav-link">Feedback</a>
+                <a runat="server" href="~Profile.aspx" class="nav-link">Profile</a>
+
+            <% } else if (role == "Student") { %>
+                <span class="nav-divider"></span>
+                <a runat="server" href="~/Student/Dashboard.aspx" class="nav-link">Dashboard</a>
+                <a runat="server" href="~/Student/MyCourses.aspx" class="nav-link">My Courses</a>
+                <a runat="server" href="~/Student/Assessments.aspx" class="nav-link">Assessments</a>
+                <a runat="server" href="~/Student/Feedback.aspx" class="nav-link">Feedback</a>
+                <a runat="server" href="~/Student/Profile.aspx" class="nav-link">Profile</a>
+
+            <% } else if (role == "Admin") { %>
+                <span class="nav-divider"></span>
+                <a runat="server" href="~/Admin/Dashboard.aspx" class="nav-link">Admin Dashboard</a>
+                <a runat="server" href="~/Admin/Users.aspx" class="nav-link">Users</a>
+                <a runat="server" href="~/Admin/Content.aspx" class="nav-link">Content</a>
+                <a runat="server" href="~/Admin/Reports.aspx" class="nav-link">Reports</a>
+            <% } %>
+
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="container main">
+        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+    </main>
+
+    <!-- FOOTER (thin + absolute bottom using flex layout) -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <small class="muted">© <%= DateTime.Now.Year %> Python Academy</small>
+        </div>
+    </footer>
+
+</div>
+
+</form>
+</body>
+</html>

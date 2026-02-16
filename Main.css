@@ -1,0 +1,187 @@
+﻿:root {
+	--bg: #0b1220;
+	--surface: rgba(16, 31, 58, .60);
+	--text: #e7eefc;
+	--muted: #a9b8d6;
+	--line: rgba(255,255,255,.12);
+	--primary: #2f7dff;
+	--primary2: #00c2ff;
+	--shadow: 0 10px 30px rgba(0,0,0,.35);
+	--radius: 16px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+	color: var(--text);
+	background: radial-gradient(1100px 500px at 15% 10%, rgba(47,125,255,.18), transparent 60%), radial-gradient(800px 450px at 85% 15%, rgba(0,194,255,.12), transparent 55%), linear-gradient(180deg, #070d18 0%, #0b1220 100%);
+}
+
+a {
+	color: inherit;
+}
+
+.muted {
+	color: var(--muted);
+}
+
+.container {
+	width: min(1100px, calc(100% - 32px));
+	margin: 0 auto;
+}
+
+/* Sticky footer layout wrapper */
+.page {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Header */
+.topbar {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	backdrop-filter: blur(10px);
+	background: rgba(15, 26, 45, .78);
+	border-bottom: 1px solid var(--line);
+}
+
+.topbar-inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 14px 0;
+}
+
+.brand {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	text-decoration: none;
+	color: var(--text);
+}
+
+.brand-logo {
+	height: 92px; /* bigger logo */
+	width: auto;
+	display: block;
+	border-radius: 14px;
+	background: rgba(255,255,255,.04);
+	padding: 6px;
+	border: 1px solid rgba(255,255,255,.10);
+}
+
+.brand-title {
+	font-size: 1.35rem;
+	font-weight: 900;
+	letter-spacing: .2px;
+}
+
+.brand-subtitle {
+	font-size: .95rem;
+	color: var(--muted);
+}
+
+.topbar-actions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+/* Navbar */
+.navbar {
+	background: rgba(16, 31, 58, .70);
+	border-bottom: 1px solid var(--line);
+}
+
+.nav-inner {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 0;
+	overflow-x: auto;
+	white-space: nowrap;
+}
+
+.nav-link {
+	text-decoration: none;
+	color: var(--text);
+	padding: 10px 12px;
+	border-radius: 12px;
+	border: 1px solid transparent;
+	transition: background .2s ease, border-color .2s ease;
+}
+
+	.nav-link:hover {
+		background: rgba(255,255,255,.07);
+		border-color: rgba(255,255,255,.12);
+	}
+
+.nav-divider {
+	width: 1px;
+	height: 22px;
+	background: rgba(255,255,255,.18);
+	margin: 0 6px;
+}
+
+/* Main grows to push footer down */
+.main {
+	flex: 1;
+	padding: 18px 0 30px 0;
+}
+
+	/* Give the main content a nice panel look */
+	.main > * {
+		background: var(--surface);
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow);
+		padding: 18px;
+	}
+
+/* Buttons */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px 12px;
+	border-radius: 12px;
+	text-decoration: none;
+	font-weight: 800;
+	border: 1px solid transparent;
+	cursor: pointer;
+}
+
+.btn-outline {
+	background: rgba(255,255,255,.05);
+	border-color: rgba(255,255,255,.12);
+	color: var(--text);
+}
+
+	.btn-outline:hover {
+		background: rgba(255,255,255,.07);
+		border-color: rgba(255,255,255,.18);
+	}
+
+/* Thin footer at absolute bottom (via flex) */
+.footer {
+	margin-top: auto;
+	background: transparent; /* prevents big bar look */
+	border-top: 1px solid var(--line);
+	padding: 10px 0; /* thin footer */
+}
+
+.footer-inner {
+	display: flex;
+	justify-content: center;
+}
