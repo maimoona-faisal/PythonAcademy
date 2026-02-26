@@ -25,14 +25,14 @@
                 Access your PythonAcademy account
             </p>
 
-             <asp:Label ID="Label1" runat="server" ForeColor="#ff4d4d" Visible="false" style="display:block; text-align:center; margin-bottom: 15px;">
+             <asp:Label ID="lblMsg" runat="server" ForeColor="#ff4d4d" style="display:block; text-align:center; margin-bottom: 15px;">
              </asp:Label>
 
              <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; color: var(--text);">
                     Email
                 </label>
-                <asp:TextBox ID="TxtEmail" runat="server" TextMode="SingleLine" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: rgba(0,0,0,0.2); color: white;">
+                <asp:TextBox ID="txtEmail" runat="server" TextMode="SingleLine" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: rgba(0,0,0,0.2); color: white;">
                 </asp:TextBox>           
             </div>
 
@@ -45,7 +45,7 @@
                 </label>
                 <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: rgba(0,0,0,0.2); color: white;">
                 </asp:TextBox>           
-            </div>
+            </div>  
 
             <div style="margin-bottom: 30px; display: flex; align-items: center;">
                 <input type="checkbox" id="showPass" onclick="togglePassword()" style="margin-right: 10px; cursor: pointer;">
@@ -67,4 +67,17 @@
             </div>
         </div>
     </div>
+    <script>
+        function togglePassword() {
+            var passField = document.getElementById('<%= txtPassword.ClientID %>');
+            var checkbox = document.getElementById('showPass');
+
+            if (checkbox.checked) {
+                passField.type = "text";
+            } else {
+                passField.type = "password";
+            }
+        }
+    </script>
 </asp:Content>
+

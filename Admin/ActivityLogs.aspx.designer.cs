@@ -11,52 +11,43 @@ namespace PythonAcademy.Admin
 {
 
 
-    public partial class ManageUsers
+    public partial class ActivityLogs
     {
 
         /// <summary>
-        /// lblMessage control.
+        /// txtDateFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
+        protected global::System.Web.UI.WebControls.TextBox txtDateFilter;
 
         /// <summary>
-        /// txtSearch control.
+        /// txtSearchFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSearch;
+        protected global::System.Web.UI.WebControls.TextBox txtSearchFilter;
 
         /// <summary>
-        /// ddlRoleFilter control.
+        /// btnFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRoleFilter;
+        protected global::System.Web.UI.WebControls.Button btnFilter;
 
         /// <summary>
-        /// btnSearch control.
+        /// gvLogs control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSearch;
-
-        /// <summary>
-        /// rptUsers control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptUsers;
+        protected global::System.Web.UI.WebControls.GridView gvLogs;
     }
 }

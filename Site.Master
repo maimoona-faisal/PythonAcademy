@@ -82,10 +82,11 @@
 
             <% } else if (role == "Admin") { %>
                 <span class="nav-divider"></span>
-                <a runat="server" href="~/Admin/Dashboard.aspx" class="nav-link">Admin Dashboard</a>
-                <a runat="server" href="~/Admin/Users.aspx" class="nav-link">Users</a>
-                <a runat="server" href="~/Admin/Content.aspx" class="nav-link">Content</a>
-                <a runat="server" href="~/Admin/Reports.aspx" class="nav-link">Reports</a>
+                <a runat="server" href="~/Admin/AdminDashboard.aspx" class="nav-link">Admin Dashboard</a>
+                <a runat="server" href="~/Admin/ManageUsers.aspx" class="nav-link">Users</a>
+                <a runat="server" href="~/Admin/Verification.aspx" class="nav-link">Verification</a>
+                <a runat="server" href="~/Admin/ManageContent.aspx" class="nav-link">Content</a>
+                <a runat="server" href="~/Admin/AdminReports.aspx" class="nav-link">Reports</a>
             <% } %>
 
         </div>

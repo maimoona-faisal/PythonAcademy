@@ -23,6 +23,8 @@
 
             <asp:Label ID="lblMessage" runat="server" Visible="false" style="display:block; text-align:center; margin-bottom: 20px; font-weight:bold; padding: 10px; border-radius: 8px;"></asp:Label>
             
+            <asp:Label ID="Label1" runat="server" Visible="false" style="display:block; text-align:center; margin-bottom: 20px; font-weight:bold; padding: 10px; border-radius: 8px;"></asp:Label>
+            
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; color: var(--muted); font-size: 0.9rem; font-weight: bold;">Username</label>
                 <asp:TextBox ID="txtUsername" runat="server"  
@@ -44,7 +46,15 @@
                 </asp:TextBox>
             </div>
 
-            <div style="margin-bottom: 30px;">
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: var(--muted); font-size: 0.9rem; font-weight: bold;">I am registering as a</label>
+                <asp:DropDownList ID="ddlRole" runat="server" style="width: 100%; padding: 16px; border-radius: 12px; border: 2px solid transparent; background: #0b1220; color: white; font-size: 1rem; outline: none; transition: 0.3s;">
+                    <asp:ListItem Value="Student">Learner (Student)</asp:ListItem>
+                    <asp:ListItem Value="Lecturer">Instructor (Lecturer)</asp:ListItem>
+                </asp:DropDownList>
+            </div>
+
+            <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; color: var(--muted); font-size: 0.9rem; font-weight: bold;">Password</label>
                 <asp:TextBox ID="txtPassword" runat="server" TextMode="Password"
                     style="width: 100%; padding: 16px; border-radius: 12px; border: 2px solid transparent; background: #0b1220; color: white; font-size: 1rem; outline: none; transition: 0.3s;">
@@ -53,7 +63,7 @@
 
             <div style="margin-bottom: 30px;">
                 <label style="display: block; margin-bottom: 8px; color: var(--muted); font-size: 0.9rem; font-weight: bold;">Verify Password</label>
-                <asp:TextBox ID="TextBox1" runat="server" TextMode="Password"
+                <asp:TextBox ID="txtVerifyPassword" runat="server" TextMode="Password"
                     style="width: 100%; padding: 16px; border-radius: 12px; border: 2px solid transparent; background: #0b1220; color: white; font-size: 1rem; outline: none; transition: 0.3s;">
                 </asp:TextBox>
             </div>
