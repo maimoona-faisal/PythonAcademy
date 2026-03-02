@@ -81,7 +81,7 @@
             
             <div class="glass-card">
                 <h3 style="color: white; margin-top: 0; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
-                    📝 Compose Broadcast
+                    Compose Broadcast
                 </h3>
 
                <label class="form-label">Announcement Title</label>
@@ -97,12 +97,12 @@
                 <label class="form-label">Message Content</label>
                 <asp:TextBox ID="txtMessage" runat="server" CssClass="glass-input" TextMode="MultiLine" Rows="5" Placeholder="Type your announcement here..."></asp:TextBox>
 
-                <asp:Button ID="btnBroadcast" runat="server" Text="📡 Broadcast Message" CssClass="btn-broadcast" OnClick="btnBroadcast_Click" />
+                <asp:Button ID="btnBroadcast" runat="server" Text="Broadcast Message" CssClass="btn-broadcast" OnClick="btnBroadcast_Click" />
             </div>
 
             <div class="glass-card">
                 <h3 style="color: white; margin-top: 0; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
-                    🕰️ Broadcast History
+                    Broadcast History
                 </h3>
 
                <asp:GridView ID="gvAnnouncements" runat="server" CssClass="user-table" 
@@ -118,7 +118,7 @@
                             <ItemTemplate>
                                 <asp:LinkButton ID="btnDelete" runat="server" CommandName="Delete" 
                                     CssClass="action-btn btn-delete" 
-                                    OnClientClick="return confirm('Delete this announcement?');">🗑️</asp:LinkButton>
+                                    OnClientClick="return confirm('Delete this announcement?');">🗑</asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateField>
                     </Columns>

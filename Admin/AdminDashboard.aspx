@@ -51,7 +51,7 @@
 
             <div class="glass-card">
                 <div style="display: flex; justify-content: space-between; color: #8899ac;">
-                    <span>TOTAL LEARNERS</span> <span style="font-size: 1.2rem;">🎓</span>
+                    <span>TOTAL LEARNERS</span> <span style="font-size: 1.2rem;"></span>
                 </div>
                 <div class="stat-number">
                     <asp:Label ID="lblStudents" runat="server" Text="0"></asp:Label>
@@ -60,7 +60,7 @@
 
             <div class="glass-card">
                 <div style="display: flex; justify-content: space-between; color: #8899ac;">
-                    <span>ACTIVE INSTRUCTORS</span> <span style="font-size: 1.2rem;">👨‍🏫</span>
+                    <span>ACTIVE INSTRUCTORS</span> <span style="font-size: 1.2rem;"></span>
                 </div>
                 <div class="stat-number">
                     <asp:Label ID="lblLecturers" runat="server" Text="0"></asp:Label>
@@ -69,7 +69,7 @@
 
             <a href="Verification.aspx" class="glass-card" style="border-color: rgba(255, 193, 7, 0.5); cursor: pointer;">
                 <div style="display: flex; justify-content: space-between; color: #ffc107;">
-                    <span>PENDING APPROVALS</span> <span style="font-size: 1.2rem;">⚠️</span>
+                    <span>PENDING APPROVALS</span> <span style="font-size: 1.2rem;"></span>
                 </div>
                 <div class="stat-number" style="background: none; -webkit-text-fill-color: #ffc107;">
                     <asp:Label ID="lblPending" runat="server" Text="0"></asp:Label>
@@ -79,7 +79,7 @@
 
             <div class="glass-card">
                 <div style="display: flex; justify-content: space-between; color: #8899ac;">
-                    <span>LEARNING MODULES</span> <span style="font-size: 1.2rem;">📦</span>
+                    <span>LEARNING MODULES</span> <span style="font-size: 1.2rem;"></span>
                 </div>
                 <div class="stat-number">
                     <asp:Label ID="lblModules" runat="server" Text="0"></asp:Label>
@@ -91,11 +91,11 @@
     <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 25px;">
 
         <div class="glass-card">
-            <h3 style="color: white; margin-top: 0; margin-bottom: 20px; font-size: 1.1rem;">⚡ Quick Actions</h3>
+            <h3 style="color: white; margin-top: 0; margin-bottom: 20px; font-size: 1.1rem;"> Quick Actions</h3>
 
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <a href="ManageUsers.aspx" style="text-decoration: none; display: flex; align-items: center; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px; color: white; transition: 0.3s;">
-                    <span style="background: rgba(0, 243, 255, 0.2); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px; margin-right: 15px; color: #00f3ff;">👤</span>
+                    <span style="background: rgba(0, 243, 255, 0.2); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px; margin-right: 15px; color: #00f3ff;"></span>
                     <div>
                         <div style="font-weight: bold; font-size: 0.9rem;">Manage Users</div>
                         <div style="font-size: 0.75rem; color: #8899ac;">Edit, ban, or remove accounts</div>
@@ -103,7 +103,7 @@
                 </a>
 
                 <a href="announcements.aspx" style="text-decoration: none; display: flex; align-items: center; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px; color: white; transition: 0.3s;">
-                    <span style="background: rgba(188, 19, 254, 0.2); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px; margin-right: 15px; color: #bc13fe;">📢</span>
+                    <span style="background: rgba(188, 19, 254, 0.2); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px; margin-right: 15px; color: #bc13fe;"></span>
                     <div>
                         <div style="font-weight: bold; font-size: 0.9rem;">System Announcement</div>
                         <div style="font-size: 0.75rem; color: #8899ac;">Post a message to all students</div>
@@ -111,7 +111,7 @@
                 </a>
 
                 <a href="Settings.aspx" style="text-decoration: none; display: flex; align-items: center; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px; color: white; transition: 0.3s;">
-                    <span style="background: rgba(255, 193, 7, 0.2); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px; margin-right: 15px; color: #ffc107;">⚙️</span>
+                    <span style="background: rgba(255, 193, 7, 0.2); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px; margin-right: 15px; color: #ffc107;"></span>
                     <div>
                         <div style="font-weight: bold; font-size: 0.9rem;">Platform Settings</div>
                         <div style="font-size: 0.75rem; color: #8899ac;">Configure database & backup</div>
@@ -122,8 +122,8 @@
 
         <div class="glass-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="color: white; margin: 0; font-size: 1.1rem;">📡 Recent System Activity</h3>
-                <span style="font-size: 0.8rem; color: #00f3ff; animation: pulse 2s infinite;">● LIVE</span>
+                <h3 style="color: white; margin: 0; font-size: 1.1rem;">Recent System Activity</h3>
+                <span style="font-size: 0.8rem; color: #00f3ff; animation: pulse 2s infinite;">~ LIVE</span>
             </div>
 
             <table class="tech-table">

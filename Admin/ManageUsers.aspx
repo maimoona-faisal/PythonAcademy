@@ -161,7 +161,7 @@
             Style="display:block; margin-bottom:12px; font-weight:bold;"></asp:Label>
 
             <div class="controls-container">
-            <span style="font-size: 1.2rem; color: #8899ac;">🔍</span>
+            <span style="font-size: 1.2rem; color: #8899ac;"> O </span>
             
             <asp:TextBox ID="txtSearch" runat="server" CssClass="search-box" Placeholder="Search by name or email..."></asp:TextBox>
             
@@ -210,12 +210,12 @@
                                         CommandName="ToggleStatus"
                                         CommandArgument='<%# Eval("UserID") %>'
                                         CssClass="action-btn btn-ban"
-                                        OnClientClick="return confirm('Update account status?');"><%# Eval("Status").ToString().ToLower() == "active" ? "🚫 Suspend" : "✅ Activate" %></asp:LinkButton>
+                                        OnClientClick="return confirm('Update account status?');"><%# Eval("Status").ToString().ToLower() == "active" ? " Suspend" : "Activate" %></asp:LinkButton>
                                     <asp:LinkButton ID="btnDelete" runat="server"
                                         CommandName="DeleteUser"
                                         CommandArgument='<%# Eval("UserID") %>'
                                         CssClass="action-btn btn-delete"
-                                        OnClientClick="return confirm('Delete this user account? This action is irreversible.');">🗑️ Delete</asp:LinkButton>
+                                        OnClientClick="return confirm('Delete this user account? This action is irreversible.');"> Delete</asp:LinkButton>
                                 </td>
                             </tr>
                         </ItemTemplate>
