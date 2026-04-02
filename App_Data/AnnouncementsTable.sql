@@ -1,8 +1,0 @@
-﻿CREATE TABLE Announcements (
-    AnnouncementID INT IDENTITY(1,1) PRIMARY KEY,
-    AdminID INT FOREIGN KEY REFERENCES Users(UserID),
-    Title NVARCHAR(200) NOT NULL,
-    Message NVARCHAR(MAX) NOT NULL,
-    TargetAudience NVARCHAR(50) NOT NULL,
-    CreatedAt DATETIME DEFAULT GETDATE()
-);

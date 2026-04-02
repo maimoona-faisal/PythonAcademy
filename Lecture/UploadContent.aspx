@@ -1,285 +1,472 @@
-﻿<%@ Page Title="Upload Content" Language="C#" MasterPageFile="~/Site.Master" %>
+<%@ Page Title="Upload Content" Language="C#" MasterPageFile="~/Site.Master" %>
 <%@ Import Namespace="System" %>
+<%@ Import Namespace="System.Collections.Generic" %>
+<%@ Import Namespace="System.Globalization" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Data.SqlClient" %>
 <%@ Import Namespace="System.Configuration" %>
+<%@ Import Namespace="PythonAcademy.Helpers" %>
 
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
 
-  <h2>Upload Learning Content</h2>
-  <p class="muted">Upload a file (PDF/Image/Video/PowerPoint/Word) or provide a resource link.</p>
+    <style>
+        /* Neon Dark Theme Styles */
+        .glass-panel { background: rgba(13, 25, 48, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); margin-bottom: 30px; }
+        .form-label { display: block; margin-bottom: 8px; color: #8899ac; font-size: 0.9rem; font-weight: bold; }
+        .neon-input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); color: white; font-size: 1rem; outline: none; transition: 0.3s; margin-bottom: 20px; }
+        .neon-input:focus { border-color: #00f3ff; box-shadow: 0 0 10px rgba(0, 243, 255, 0.1); }
+        .btn-publish { background: #00f3ff; color: #0b1220; border: none; padding: 12px 24px; font-size: 1rem; font-weight: 800; border-radius: 50px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 243, 255, 0.3); }
+        .btn-publish:hover { background: white; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 243, 255, 0.5); }
+        .dark-grid { width: 100%; border-collapse: collapse; color: #e7eefc; }
+        .dark-grid th { background: rgba(0, 0, 0, 0.4); color: #00f3ff; padding: 12px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .dark-grid td { padding: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .dark-grid tr:hover { background: rgba(255, 255, 255, 0.02); }
 
-  <!-- FORM -->
-  <div style="max-width:760px; display:grid; gap:10px; margin-top:12px;">
+        /* --- THUMBNAIL GALLERY STYLES --- */
+        .thumb-gallery { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 25px; }
+        .thumb-option { width: 140px; height: 80px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.1); cursor: pointer; background-size: cover; background-position: center; transition: all 0.2s ease; opacity: 0.5; }
+        .thumb-option:hover { opacity: 0.9; }
+        .thumb-option.selected { border-color: #00f3ff; box-shadow: 0 0 12px rgba(0, 243, 255, 0.4); opacity: 1; transform: scale(1.05); }
+    </style>
 
-    <label>Title</label>
-    <asp:TextBox ID="txtTitle" runat="server" CssClass="input" />
+    <div style="max-width: 1000px; margin: 0 auto; padding: 20px;">
+        
+        <div style="margin-bottom: 30px;">
+            <h1 style="font-size: 2.2rem; font-weight: bold; color: white; margin: 0;">Create and Upload Modules</h1>
+            <p style="color: #8899ac; margin-top: 5px;">Create the main module here, then add lessons and materials using Manage Topics.</p>
+        </div>
 
-    <label>Description</label>
-    <asp:TextBox ID="txtDesc" runat="server" CssClass="input"
-                 TextMode="MultiLine" Rows="4" />
+        <div class="glass-panel">
+            <asp:Label ID="lblMode" runat="server" Text="Creating New Content" Style="color: #00f3ff; font-weight: bold; font-size: 1.1rem; margin-bottom: 20px; display: block;" />
+            <asp:Label ID="lblMsg" runat="server" Style="display:block; margin-bottom:15px; font-weight:bold;" />
 
-    <label>Content Type</label>
-    <asp:DropDownList ID="ddlType" runat="server" CssClass="input">
-      <asp:ListItem Text="PDF" Value="PDF" />
-      <asp:ListItem Text="Video" Value="Video" />
-      <asp:ListItem Text="Image" Value="Image" />
-      <asp:ListItem Text="Link" Value="Link" />
-      <asp:ListItem Text="PowerPoint" Value="PowerPoint" />
-      <asp:ListItem Text="Word" Value="Word" />
-    </asp:DropDownList>
+            <label class="form-label">Module Title</label>
+            <asp:TextBox ID="txtTitle" runat="server" CssClass="neon-input" placeholder="e.g. Introduction to Python" />
 
-    <label>Upload File (optional)</label>
-    <asp:FileUpload ID="fuFile" runat="server" CssClass="input" />
+            <label class="form-label">Course Category / Genre</label>
+            <asp:DropDownList ID="ddlCategory" runat="server" CssClass="neon-input">
+                <asp:ListItem Text="General" Value="General" />
+                <asp:ListItem Text="Python Basics" Value="Python Basics" />
+                <asp:ListItem Text="Cybersecurity" Value="Cybersecurity" />
+                <asp:ListItem Text="Data Analytics" Value="Data Analytics" />
+                <asp:ListItem Text="Machine Learning" Value="Machine Learning" />
+                <asp:ListItem Text="Web Development" Value="Web Development" />
+                <asp:ListItem Text="Data Science" Value="Data Science" />
+                <asp:ListItem Text="Automation" Value="Automation" />
+                <asp:ListItem Text="Artificial Intelligence" Value="Artificial Intelligence" />
+                <asp:ListItem Text="Game Development" Value="Game Development" />
+            </asp:DropDownList>
 
-    <label>OR Resource URL (optional)</label>
-    <asp:TextBox ID="txtUrl" runat="server" CssClass="input" />
+            <label class="form-label">Description</label>
+            <asp:TextBox ID="txtDesc" runat="server" CssClass="neon-input" TextMode="MultiLine" Rows="4" placeholder="What will students learn in this module?" />
 
-    <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
-      <asp:CheckBox ID="chkPublish" runat="server" />
-      <span>Publish now</span>
+            <label class="form-label">Course Cover Art (Thumbnail)</label>
+            <div class="thumb-gallery">
+                <div class="thumb-option selected" style="background-image: url('/Images/Thumbnails/python101.png');" onclick="selectThumb(this, '~/Images/Thumbnails/python101.png')"></div>
+                <div class="thumb-option" style="background-image: url('/Images/Thumbnails/ethicalHacking.png');" onclick="selectThumb(this, '~/Images/Thumbnails/ethicalHacking.png')"></div>
+                <div class="thumb-option" style="background-image: url('/Images/Thumbnails/data.jpg');" onclick="selectThumb(this, '~/Images/Thumbnails/data.jpg')"></div>
+                <div class="thumb-option" style="background-image: url('/Images/Thumbnails/cyber.jpg');" onclick="selectThumb(this, '~/Images/Thumbnails/cyber.jpg')"></div>
+                <div class="thumb-option" style="background-image: url('/Images/Thumbnails/ethicalHacking.png');" onclick="selectThumb(this, '~/Images/Thumbnails/ethicalHacking.png')"></div>
+                <div class="thumb-option" style="background-image: url('/Images/Thumbnails/automation.png');" onclick="selectThumb(this, '~/Images/Thumbnails/automation.png')"></div>
+                <div class="thumb-option" style="background-image: url('/Images/Thumbnails/DataScience.png');" onclick="selectThumb(this, '~/Images/Thumbnails/DataScience.png')"></div>
+                <div class="thumb-option" style="background-image: url('/Images/Thumbnails/game.png');" onclick="selectThumb(this, '~/Images/Thumbnails/game.png')"></div>
+                <div class="thumb-option" style="background-image: url('/Images/Thumbnails/machinelearning.png');" onclick="selectThumb(this, '~/Images/Thumbnails/machinelearning.png')"></div>
+                <div class="thumb-option" style="background-image: url('/Images/Thumbnails/web.png');" onclick="selectThumb(this, '~/Images/Thumbnails/web.png')"></div>
+                <div class="thumb-option" style="background-image: url('/Images/Thumbnails/test.png');" onclick="selectThumb(this, '~/Images/Thumbnails/test.png')"></div>
+                </div>
+
+            <asp:HiddenField ID="hfSelectedThumbnail" runat="server" Value="~/Images/Thumbnails/python101.png" />
+            <div style="display: flex; gap: 15px; margin-top: 10px;">
+                <asp:Button ID="btnUpload" runat="server" Text="Create Module" CssClass="btn-publish" OnClick="UploadContent" />
+                <asp:Button ID="btnClear" runat="server" Text="Clear" CssClass="btn btn-outline" OnClick="ClearForm" CausesValidation="false" Style="border-radius: 50px; padding: 12px 24px;" />
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h3 style="color: white; margin-top: 0; margin-bottom: 20px;">My Published Modules</h3>
+
+            <div style="overflow-x: auto;">
+                <asp:GridView ID="gvContent" runat="server" DataSourceID="dsContent" AutoGenerateColumns="False" CssClass="dark-grid" DataKeyNames="ContentId" OnRowCommand="gvContent_RowCommand" EmptyDataText="No modules created yet." GridLines="None">
+                    <Columns>
+                        <asp:TemplateField HeaderText="Module Title">
+                            <ItemTemplate>
+                                <asp:LinkButton 
+                                    ID="lnkEditTitle" 
+                                    runat="server"
+                                    CommandName="EDIT"
+                                    CommandArgument='<%# Eval("ContentId") %>'
+                                    Style="color: #e7eefc; text-decoration: none; font-weight: 600;">
+                                    <%# Eval("Title") %>
+                                </asp:LinkButton>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField HeaderText="Created On" DataField="CreatedAt" SortExpression="CreatedAt" DataFormatString="{0:MMM dd, yyyy}" />
+    
+                        <asp:TemplateField HeaderText="Lesson Plan">
+                            <ItemTemplate>
+                                <asp:LinkButton runat="server" CommandName="MANAGE" CommandArgument='<%# Eval("ContentId") %>' CssClass="btn btn-outline" style="color: #ffd740; border-color: rgba(255, 215, 64, 0.3); font-size: 0.85rem; padding: 6px 12px;">
+                                    &#9881; Manage Topics
+                                </asp:LinkButton>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:TemplateField HeaderText="Actions">
+                            <ItemTemplate>
+                                <div style="display:flex; gap:12px; align-items:center;">
+                                    <asp:LinkButton 
+                                        ID="lnkEdit" 
+                                        runat="server" 
+                                        CommandName="EDIT" 
+                                        CommandArgument='<%# Eval("ContentId") %>'
+                                        Style="color:#00f3ff; font-size:0.85rem; text-decoration:none; font-weight:600;">
+                                        Edit
+                                    </asp:LinkButton>
+
+                                    <asp:LinkButton 
+                                        ID="lnkDelete"
+                                        runat="server" 
+                                        CommandName="DEL" 
+                                        CommandArgument='<%# Eval("ContentId") %>' 
+                                        ForeColor="#ff4d4d" 
+                                        Style="font-size:0.85rem; text-decoration:none;"
+                                        OnClientClick="return confirm('Unpublish this module?');">
+                                        Delete
+                                    </asp:LinkButton>
+                                </div>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                    </Columns>
+                </asp:GridView>
+            </div>
+        </div>
     </div>
-
-    <div style="display:flex; gap:10px; margin-top:10px;">
-      <asp:Button ID="btnUpload" runat="server" Text="Save Content"
-                  CssClass="btn btn-primary" OnClick="UploadContent" />
-      <asp:Button ID="btnClear" runat="server" Text="Clear"
-                  CssClass="btn btn-outline" OnClick="ClearForm" CausesValidation="false" />
-    </div>
-
-    <asp:Label ID="lblMsg" runat="server" />
-
-  </div>
-
-  <hr style="margin:22px 0; border:none; border-top:1px solid rgba(255,255,255,.12);" />
-
-  <!-- GRID -->
-  <h3 style="margin:0 0 10px 0;">My Uploaded Content</h3>
-
-  <asp:GridView ID="gvContent" runat="server"
-      DataSourceID="dsContent"
-      AutoGenerateColumns="False"
-      CssClass="grid"
-      DataKeyNames="ContentId&nbsp;&nbsp;&nbsp;"
-      OnRowCommand="gvContent_RowCommand"
-      EmptyDataText="No content uploaded yet." OnSelectedIndexChanged="gvContent_SelectedIndexChanged">
-
-    <Columns>
-      <asp:BoundField HeaderText="ContentId&nbsp;&nbsp;&nbsp;" DataField="ContentId&nbsp;&nbsp;&nbsp;" ReadOnly="True" SortExpression="ContentId&nbsp;&nbsp;&nbsp;" />
-      <asp:BoundField HeaderText="LecturerId" DataField="LecturerId" SortExpression="LecturerId" />
-      <asp:BoundField HeaderText="Title&nbsp;&nbsp;" DataField="Title&nbsp;&nbsp;" SortExpression="Title&nbsp;&nbsp;" />
-      <asp:BoundField HeaderText="Description&nbsp;&nbsp;" DataField="Description&nbsp;&nbsp;" SortExpression="Description&nbsp;&nbsp;" />
-
-        <asp:BoundField DataField="ContentType" HeaderText="ContentType" SortExpression="ContentType" />
-		<asp:BoundField DataField="FilePath&nbsp;" HeaderText="FilePath&nbsp;" SortExpression="FilePath&nbsp;" />
-		<asp:BoundField DataField="Url&nbsp;&nbsp;&nbsp;" HeaderText="Url&nbsp;&nbsp;&nbsp;" SortExpression="Url&nbsp;&nbsp;&nbsp;" />
-		<asp:CheckBoxField DataField="IsPublished&nbsp;" HeaderText="IsPublished&nbsp;" SortExpression="IsPublished&nbsp;" />
-		<asp:BoundField DataField="CreatedAt&nbsp;" HeaderText="CreatedAt&nbsp;" SortExpression="CreatedAt&nbsp;" />
-    </Columns>
-
-  </asp:GridView>
-
-  <!-- DATASOURCE (METHOD 2) -->
-  <asp:SqlDataSource ID="dsContent" runat="server"
-      ConnectionString="<%$ ConnectionStrings:ConnectionString %>"
-      SelectCommand="SELECT * FROM [LearningContent]">
-  </asp:SqlDataSource>
-
+    <script>
+        function selectThumb(element, path) {
+            // Remove highlight from all images
+            document.querySelectorAll('.thumb-option').forEach(el => el.classList.remove('selected'));
+            // Highlight the clicked one
+            element.classList.add('selected');
+            element.classList.add('selected');
+            // Save the path to the hidden C# field
+            document.getElementById('<%= hfSelectedThumbnail.ClientID %>').value = path;
+        }
+    </script>
+    <asp:SqlDataSource ID="dsContent" runat="server" ConnectionString="<%$ ConnectionStrings:PythonAcademyDb %>" SelectCommand="SELECT ContentId, LecturerId, Title, Description, IsPublished, CreatedAt FROM dbo.LearningContent WHERE LecturerId = @LecturerId AND IsPublished = 1 ORDER BY CreatedAt DESC;">
+        <SelectParameters>
+            <asp:SessionParameter Name="LecturerId" SessionField="UserId" Type="Int32" />
+        </SelectParameters>
+    </asp:SqlDataSource>
 </asp:Content>
 
 <script runat="server">
 
-    private string Cs => ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+    private const int MaxUploadBytes = 25 * 1024 * 1024;
 
-    private int LecturerId
+    private static readonly IDictionary<string, string[]> AllowedExtensionsByType =
+        new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "PDF", new[] { ".pdf" } },
+            { "Video", new[] { ".mp4", ".webm" } },
+            { "Image", new[] { ".png", ".jpg", ".jpeg", ".gif" } },
+            { "PowerPoint", new[] { ".ppt", ".pptx" } },
+            { "Word", new[] { ".doc", ".docx" } },
+            { "Link", Array.Empty<string>() }
+        };
+
+    private string Cs => ConfigurationManager.ConnectionStrings["PythonAcademyDb"].ConnectionString;
+
+    private bool IsAdmin
     {
         get
         {
-            if (Session["UserId"] == null) return 1; // temp for testing
-            return Convert.ToInt32(Session["UserId"]);
+            return string.Equals(Convert.ToString(Session["Role"], CultureInfo.InvariantCulture), "Admin", StringComparison.OrdinalIgnoreCase);
         }
+    }
+
+    private int CurrentUserId
+    {
+        get
+        {
+            object userId = Session["UserId"] ?? Session["UserID"];
+            return Convert.ToInt32(userId, CultureInfo.InvariantCulture);
+        }
+    }
+
+    private int? EditId
+    {
+        get
+        {
+            int id;
+            return int.TryParse(Request.QueryString["editId"], out id) ? (int?)id : null;
+        }
+    }
+
+    private string ExistingFilePath
+    {
+        get { return Convert.ToString(ViewState["ExistingFilePath"], CultureInfo.InvariantCulture); }
+        set { ViewState["ExistingFilePath"] = value; }
     }
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!EnsureLecturerAccess())
+        {
+            return;
+        }
+
         if (!IsPostBack)
         {
-            lblMsg.Text = "";
+            string msg = Convert.ToString(Request.QueryString["msg"], CultureInfo.InvariantCulture);
+
+            if (string.Equals(msg, "created", StringComparison.OrdinalIgnoreCase))
+            {
+                ShowSuccess("Module created successfully. You can now add topics or create another module.");
+            }
+            else if (string.Equals(msg, "updated", StringComparison.OrdinalIgnoreCase))
+            {
+                ShowSuccess("Module updated successfully.");
+            }
+
+            if (EditId.HasValue)
+            {
+                if (!LoadExistingData(EditId.Value))
+                {
+                    return;
+                }
+
+                lblMode.Text = "Editing Module (ID: " + EditId.Value.ToString(CultureInfo.InvariantCulture) + ")";
+                btnUpload.Text = "Update Module";
+                btnClear.Text = "Cancel Edit";
+            }
+            else
+            {
+                lblMode.Text = "Creating New Content";
+                btnUpload.Text = "Create Module";
+                btnClear.Text = "Clear";
+            }
         }
     }
 
-    protected void UploadContent(object sender, EventArgs e)
+    private bool EnsureLecturerAccess()
     {
-        lblMsg.ForeColor = System.Drawing.Color.OrangeRed;
+        object userId = Session["UserId"] ?? Session["UserID"];
+        string role = Convert.ToString(Session["Role"], CultureInfo.InvariantCulture);
+        int parsedUserId;
 
-        string title = (txtTitle.Text ?? "").Trim();
-        string desc = (txtDesc.Text ?? "").Trim();
-        string type = ddlType.SelectedValue;
-        string url = (txtUrl.Text ?? "").Trim();
-        bool published = chkPublish.Checked;
-
-        if (string.IsNullOrWhiteSpace(title))
+        if (userId == null ||
+            !int.TryParse(Convert.ToString(userId, CultureInfo.InvariantCulture), out parsedUserId) ||
+            (!string.Equals(role, "Lecturer", StringComparison.OrdinalIgnoreCase) &&
+             !string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase)))
         {
-            lblMsg.Text = "Title is required.";
-            return;
+            string returnUrl = Server.UrlEncode(Request.RawUrl);
+            Response.Redirect("~/LoginandRegister/LoginPage.aspx?returnUrl=" + returnUrl, false);
+            Context.ApplicationInstance.CompleteRequest();
+            return false;
         }
 
-        // For Link type, URL is required
-        if (type == "Link" && string.IsNullOrWhiteSpace(url))
+        return true;
+    }
+
+  private bool LoadExistingData(int id)
+    {
+        using (SqlConnection con = new SqlConnection(Cs))
+        using (SqlCommand cmd = new SqlCommand(@"
+            SELECT Title, Description, ISNULL(Category, 'General') AS Category, ThumbnailPath
+            FROM dbo.LearningContent
+            WHERE ContentId = @Id
+              AND (@IsAdmin = 1 OR LecturerId = @LecturerId);", con))
         {
-            lblMsg.Text = "For Content Type = Link, please provide a URL.";
-            return;
-        }
+            // 1. Add the parameters back
+            cmd.Parameters.AddWithValue("@Id", id);
+            cmd.Parameters.AddWithValue("@IsAdmin", IsAdmin);
+            cmd.Parameters.AddWithValue("@LecturerId", CurrentUserId);
 
-        string filePath = null;
+            // 2. Actually OPEN the connection!
+            con.Open();
 
-        // Save uploaded file into ~/Uploads/
-        if (fuFile.HasFile)
-        {
-            string uploadsFolder = Server.MapPath("~/Uploads/");
-            if (!Directory.Exists(uploadsFolder))
-                Directory.CreateDirectory(uploadsFolder);
-
-            string originalName = Path.GetFileName(fuFile.FileName);
-            string ext = Path.GetExtension(originalName);
-
-            // Optional: simple allow-list (adjust as you want)
-            string allowed = ".pdf,.png,.jpg,.jpeg,.gif,.mp4,.webm,.ppt,.pptx,.doc,.docx";
-            if (!allowed.Contains(ext.ToLower()))
+            using (SqlDataReader rdr = cmd.ExecuteReader())
             {
-                lblMsg.Text = "File type not allowed.";
-                return;
+                if (!rdr.Read()) 
+                { 
+                    ShowError("You can only edit content that you own unless you are an admin.");
+                    btnUpload.Enabled = false;
+                    return false; 
+                }
+
+                txtTitle.Text = rdr["Title"].ToString();
+                txtDesc.Text = rdr["Description"].ToString();
+                
+                string cat = rdr["Category"].ToString();
+                if (ddlCategory.Items.FindByValue(cat) != null)
+                {
+                    ddlCategory.SelectedValue = cat;
+                }
+
+                // Safer to have this outside! That way the image always loads, no matter what.
+                if (rdr["ThumbnailPath"] != DBNull.Value)
+                {
+                    hfSelectedThumbnail.Value = rdr["ThumbnailPath"].ToString();
+                }
             }
-
-            string safeBase = Path.GetFileNameWithoutExtension(originalName);
-            string uniqueName = safeBase + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ext;
-
-            fuFile.SaveAs(Path.Combine(uploadsFolder, uniqueName));
-            filePath = "~/Uploads/" + uniqueName;
         }
+        return true;
+    }
 
-        // Must have either file or URL
-        if (string.IsNullOrWhiteSpace(filePath) && string.IsNullOrWhiteSpace(url))
-        {
-            lblMsg.Text = "Please upload a file or provide a URL.";
-            return;
-        }
+protected void UploadContent(object sender, EventArgs e)
+    {
+        if (!EnsureLecturerAccess()) return;
+
+        string title = (txtTitle.Text ?? string.Empty).Trim();
+        string desc = (txtDesc.Text ?? string.Empty).Trim();
+        string category = ddlCategory.SelectedValue; // <-- Grab the category
+
+        if (string.IsNullOrWhiteSpace(title)) { ShowError("Title is required."); return; }
 
         try
         {
             using (SqlConnection con = new SqlConnection(Cs))
-            using (SqlCommand cmd = new SqlCommand(@"
-        INSERT INTO dbo.LearningContent
-          (LecturerId, Title, Description, ContentType, FilePath, Url, IsPublished, CreatedAt)
-        VALUES
-          (@LecturerId, @Title, @Description, @ContentType, @FilePath, @Url, @IsPublished, GETDATE());
-      ", con))
             {
-                cmd.Parameters.AddWithValue("@LecturerId", LecturerId);
-                cmd.Parameters.AddWithValue("@Title", title);
-                cmd.Parameters.AddWithValue("@Description", (object)desc ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ContentType", (object)type ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@FilePath", (object)filePath ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@Url", (object)url ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@IsPublished", published);
+                string sql;
+                if (EditId.HasValue)
+                {
+                    sql = @"
+                        UPDATE dbo.LearningContent
+                        SET Title = @T, Description = @D, Category = @Cat, ThumbnailPath = @Thumb
+                        WHERE ContentId = @ID AND (@IsAdmin = 1 OR LecturerId = @L);";
+                }
+                else
+                {
+                    sql = @"
+                        INSERT INTO dbo.LearningContent
+                        (LecturerId, Title, Description, ContentType, FilePath, Url, IsPublished, CreatedAt, Category, ThumbnailPath)
+                        VALUES
+                        (@L, @T, @D, 'Course', '', '', 1, GETDATE(), @Cat, @Thumb);";
+                }
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    if (EditId.HasValue) { cmd.Parameters.AddWithValue("@ID", EditId.Value); cmd.Parameters.AddWithValue("@IsAdmin", IsAdmin); }
+                    cmd.Parameters.AddWithValue("@L", CurrentUserId);
+                    cmd.Parameters.AddWithValue("@T", title);
+                    cmd.Parameters.AddWithValue("@D", string.IsNullOrWhiteSpace(desc) ? (object)DBNull.Value : desc);
+                    cmd.Parameters.AddWithValue("@Cat", category);
+                    
+                    // NEW: Save the thumbnail from the Hidden Field
+                    cmd.Parameters.AddWithValue("@Thumb", hfSelectedThumbnail.Value);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
-            lblMsg.ForeColor = System.Drawing.Color.LightGreen;
-            lblMsg.Text = "Saved successfully.";
-
-            ClearInputsOnly();
-
-            // Refresh Method 2 binding
-            gvContent.DataBind();
+            if (EditId.HasValue)
+            {
+                Response.Redirect("~/Lecture/UploadContent.aspx?msg=updated", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+            else
+            {
+                Response.Redirect("~/Lecture/UploadContent.aspx?msg=created", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
         }
         catch (Exception ex)
         {
-            lblMsg.ForeColor = System.Drawing.Color.OrangeRed;
-            lblMsg.Text = "Save failed: " + ex.Message;
+            Trace.Warn("UploadContent", "Failed to save content.", ex);
+            ShowError("We couldn't save that content right now. Please try again.");
         }
-    }
-
-    protected void ClearForm(object sender, EventArgs e)
-    {
-        lblMsg.Text = "";
-        ClearInputsOnly();
     }
 
     private void ClearInputsOnly()
     {
-        txtTitle.Text = "";
-        txtDesc.Text = "";
-        ddlType.SelectedIndex = 0;
-        txtUrl.Text = "";
-        chkPublish.Checked = false;
+        txtTitle.Text = string.Empty;
+        txtDesc.Text = string.Empty;
     }
 
     protected void gvContent_RowCommand(object sender, System.Web.UI.WebControls.GridViewCommandEventArgs e)
+{
+    string contentIdStr = Convert.ToString(e.CommandArgument, CultureInfo.InvariantCulture);
+
+    if (e.CommandName == "EDIT")
     {
-        if (e.CommandName == "DEL")
+        Response.Redirect("~/Lecture/UploadContent.aspx?editId=" + contentIdStr, false);
+        Context.ApplicationInstance.CompleteRequest();
+        return;
+    }
+
+    if (e.CommandName == "MANAGE")
+    {
+        Response.Redirect("~/Lecture/manageTopics.aspx?ModuleId=" + contentIdStr, false);
+        Context.ApplicationInstance.CompleteRequest();
+        return;
+    }
+
+    if (e.CommandName != "DEL")
+    {
+        return;
+    }
+
+    int contentId;
+    if (!int.TryParse(contentIdStr, out contentId))
+    {
+        ShowError("Invalid content selection.");
+        return;
+    }
+
+    try
+    {
+        using (SqlConnection con = new SqlConnection(Cs))
+        using (SqlCommand cmd = new SqlCommand(@"
+            UPDATE dbo.LearningContent
+            SET IsPublished = 0
+            WHERE ContentId = @Id
+              AND (@IsAdmin = 1 OR LecturerId = @LecturerId);", con))
         {
-            int contentId = Convert.ToInt32(e.CommandArgument);
+            cmd.Parameters.AddWithValue("@Id", contentId);
+            cmd.Parameters.AddWithValue("@IsAdmin", IsAdmin);
+            cmd.Parameters.AddWithValue("@LecturerId", CurrentUserId);
 
-            string filePath = null;
+            con.Open();
+            int rows = cmd.ExecuteNonQuery();
 
-            try
+            if (rows == 0)
             {
-                using (SqlConnection con = new SqlConnection(Cs))
-                {
-                    con.Open();
-
-                    // get filepath
-                    using (SqlCommand getCmd = new SqlCommand(@"
-            SELECT FilePath
-            FROM dbo.LearningContent
-            WHERE ContentId=@Id AND LecturerId=@L;
-          ", con))
-                    {
-                        getCmd.Parameters.AddWithValue("@Id", contentId);
-                        getCmd.Parameters.AddWithValue("@L", LecturerId);
-
-                        object fp = getCmd.ExecuteScalar();
-                        if (fp != null && fp != DBNull.Value) filePath = fp.ToString();
-                    }
-
-                    // delete row
-                    using (SqlCommand delCmd = new SqlCommand(@"
-            DELETE FROM dbo.LearningContent
-            WHERE ContentId=@Id AND LecturerId=@L;
-          ", con))
-                    {
-                        delCmd.Parameters.AddWithValue("@Id", contentId);
-                        delCmd.Parameters.AddWithValue("@L", LecturerId);
-                        delCmd.ExecuteNonQuery();
-                    }
-                }
-
-                // delete physical file if exists
-                if (!string.IsNullOrWhiteSpace(filePath))
-                {
-                    string physical = Server.MapPath(filePath);
-                    if (File.Exists(physical))
-                        File.Delete(physical);
-                }
-
-                lblMsg.ForeColor = System.Drawing.Color.LightGreen;
-                lblMsg.Text = "Deleted.";
-
-                gvContent.DataBind();
-            }
-            catch (Exception ex)
-            {
-                lblMsg.ForeColor = System.Drawing.Color.OrangeRed;
-                lblMsg.Text = "Delete failed: " + ex.Message;
+                ShowError("You can only change content that you own unless you are an admin.");
+                return;
             }
         }
+
+        ShowSuccess("Content unpublished.");
+        gvContent.DataBind();
     }
+    catch (Exception ex)
+    {
+        Trace.Warn("UploadContent", "Failed to unpublish content.", ex);
+        ShowError("We couldn't update that content right now. Please try again.");
+    }
+}
 
     protected void gvContent_SelectedIndexChanged(object sender, EventArgs e)
     {
+    }
 
+    protected void ClearForm(object sender, EventArgs e)
+{
+    Response.Redirect("~/Lecture/UploadContent.aspx", false);
+    Context.ApplicationInstance.CompleteRequest();
+}
+
+    private void ShowError(string message)
+    {
+        lblMsg.ForeColor = System.Drawing.Color.OrangeRed;
+        lblMsg.Text = message;
+    }
+
+    private void ShowSuccess(string message)
+    {
+        lblMsg.ForeColor = System.Drawing.Color.LightGreen;
+        lblMsg.Text = message;
     }
 </script>

@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" %>
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="PythonAcademy.SiteMaster" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,10 +10,8 @@
         <asp:ContentPlaceHolder ID="TitleContent" runat="server" /> - Python Academy
     </title>
 
-    <!-- External CSS -->
     <link rel="stylesheet" href="<%= ResolveUrl("~/Main.css") %>" />
 
-    <!-- (Optional) internal CSS proof for assignment -->
     <style>
         .role-pill { border-radius: 999px; padding: 6px 10px; font-size: .85rem; }
     </style>
@@ -22,22 +20,19 @@
 </head>
 
 <body>
-<form id="form1" runat="server">
+<form id="form1" runat="server" enctype="multipart/form-data">
 
 <%
-    // UI-only: read session (login logic stays in Login/Register pages)
-    string role = Session["Role"] as string;   // "Lecturer" / "Student" / "Admin" / null
+    string role = Session["Role"] as string;
     string name = Session["Name"] as string;
     bool loggedIn = !string.IsNullOrWhiteSpace(role);
 %>
 
 <div class="page">
 
-    <!-- HEADER -->
     <header class="topbar">
         <div class="container topbar-inner">
             <a runat="server" href="~/Default.aspx" class="brand">
-                <!--  -->
                 <img src="<%= ResolveUrl("~/Uploads/Python Academy Logo.png") %>"
                      alt="Python Academy Logo"
                      class="brand-logo" />
@@ -47,65 +42,327 @@
                 </div>
             </a>
 
-            <!--  -->
-            <div class="topbar-actions">
-                <a class="btn btn-outline" runat="server" href="~/Auth/Logout.aspx">Logout</a>
-            </div>
+           <div class="topbar-actions" style="display: flex; align-items: center; gap: 15px;">
+            <a runat="server" href="~/Default.aspx" class="nav-link top-nav-link">Home</a>
+            <a runat="server" href="~/browseCourses.aspx" class="nav-link top-nav-link">Browse Resources</a>
+            <a runat="server" href="~/About.aspx" class="nav-link top-nav-link">About</a>
+    
+            <a id="lnkLogout" class="btn btn-outline" runat="server" onserverclick="Logout_Click" href="#" style="margin-left: 10px;">Logout</a>
+           </div>
         </div>
     </header>
 
-    <!-- NAV (role-based, but no login/register here) -->
-    <nav class="navbar">
-        <div class="container nav-inner">
+    <div id="sidebarTriggerZone"></div>
 
-            <!-- Common links -->
-            <a runat="server" href="~/Default.aspx" class="nav-link">Home</a>
-            <a runat="server" href="~/Public/Resources.aspx" class="nav-link">Browse Resources</a>
-            <a runat="server" href="~/About.aspx" class="nav-link">About</a>
+    <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-            <% if (role == "Lecturer") { %>
-                <span class="nav-divider"></span>
-                <a runat="server" href="~/l_dashboard.aspx" class="nav-link">Dashboard</a>
-                <a runat="server" href="~UploadContent.aspx" class="nav-link">Upload</a>
-                <a runat="server" href="~CreateQuiz.aspx" class="nav-link">Create Quiz/Exam</a>
-                <a runat="server" href="~Grade.aspx" class="nav-link">Grade</a>
-                <a runat="server" href="~Feedback.aspx" class="nav-link">Feedback</a>
-                <a runat="server" href="~Profile.aspx" class="nav-link">Profile</a>
+<div id="sideNav" class="sidebar">
+    <a href="javascript:void(0)" class="close-btn" onclick="toggleSidebar()">&#10006;</a>
+    
+    <div class="sidebar-links">
+        <a runat="server" href="~/Default.aspx" class="side-link">Home</a>
+        <a runat="server" href="~/browseCourses.aspx" class="side-link">Browse Resources</a>
+        <a runat="server" href="~/About.aspx" class="side-link">About</a>
 
-            <% } else if (role == "Student") { %>
-                <span class="nav-divider"></span>
-                <a runat="server" href="~/Student/Dashboard.aspx" class="nav-link">Dashboard</a>
-                <a runat="server" href="~/Student/MyCourses.aspx" class="nav-link">My Courses</a>
-                <a runat="server" href="~/Student/Assessments.aspx" class="nav-link">Assessments</a>
-                <a runat="server" href="~/Student/Feedback.aspx" class="nav-link">Feedback</a>
-                <a runat="server" href="~/Student/Profile.aspx" class="nav-link">Profile</a>
+        <% if (loggedIn) { %>
+            <a href="~/messages.aspx" runat="server" class="side-link" style="position: relative;">
+                Messages
+                <asp:Label ID="lblUnreadBadge" runat="server" 
+                    style="background: #ff4757; color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 6px; border-radius: 50%; position: absolute; top: 12px; right: 15px;" 
+                    Visible="false">
+                </asp:Label>
+            </a>
+        <% } %>
 
-            <% } else if (role == "Admin") { %>
-                <span class="nav-divider"></span>
-                <a runat="server" href="~/Admin/AdminDashboard.aspx" class="nav-link">Admin Dashboard</a>
-                <a runat="server" href="~/Admin/ManageUsers.aspx" class="nav-link">Users</a>
-                <a runat="server" href="~/Admin/Verification.aspx" class="nav-link">Verification</a>
-                <a runat="server" href="~/Admin/ManageContent.aspx" class="nav-link">Content</a>
-                <a runat="server" href="~/Admin/AdminReports.aspx" class="nav-link">Reports</a>
-            <% } %>
+        <% if (role == "Lecturer") { %>
+            <div class="side-divider">Instructor</div>
+            <a runat="server" href="~/Lecture/l_dashboard.aspx" class="side-link">Dashboard</a>
+            <a runat="server" href="~/Lecture/UploadContent.aspx" class="side-link">Upload</a>
+            <a runat="server" href="~/Lecture/CreateAssessment.aspx" class="side-link">Create Quiz/Exam</a>
+            <a runat="server" href="~/Lecture/grade.aspx" class="side-link">Grade</a>
+            <a runat="server" href="~/Lecture/viewFeedback.aspx" class="side-link">Feedback</a>
+            <a runat="server" href="~/Lecture/editProfile.aspx" class="side-link">Profile</a>
 
-        </div>
-    </nav>
+        <% } else if (role == "Student") { %>
+            <div class="side-divider">Learner</div>
+            <a runat="server" href="~/Learner-Jo/MemberDashboard.aspx" class="side-link">Dashboard</a>
+            <a runat="server" href="~/Learner-Jo/LearningMaterials.aspx" class="side-link">Learning materials</a>
+            <a runat="server" href="practiceCode.aspx" class="side-link" style="color: #00f3ff;">>_ Code Terminal</a>
+            <a runat="server" href="~/Learner-wei/Feedback.aspx" class="side-link">Feedback</a>
+            <a runat="server" href="~/Learner-wei/LearnersProfile.aspx" class="side-link">Profile</a>
+            <a runat="server" href="~/Learner-wei/TrackProgress.aspx" class="side-link">Track Progress</a>
 
-    <!-- MAIN -->
+        <% } else if (role == "Admin") { %>
+            <div class="side-divider">Admin Controls</div>
+            <a runat="server" href="~/Admin/AdminDashboard.aspx" class="side-link">Admin Dashboard</a>
+            <a runat="server" href="~/Admin/ManageUsers.aspx" class="side-link">Users</a>
+            <a runat="server" href="~/Admin/verification.aspx" class="side-link">Verification</a>
+            <a runat="server" href="~/Admin/ManageContent.aspx" class="side-link">Content</a>
+            <a runat="server" href="~/Admin/AdminReports.aspx" class="side-link">Reports</a>
+            <a runat="server" href="~/Admin/announcements.aspx" class="side-link">Announcements</a>
+            <a runat="server" href="~/Admin/Settings.aspx" class="side-link">Settings</a>
+            <a runat="server" href="~/Admin/ActivityLogs.aspx" class="side-link">Activity Logs</a>
+            <a runat="server" href="~/Admin/viewWebFeedback.aspx" class="side-link">Web Feedback</a>
+        <% } %>
+    </div>
+</div>
+
     <main class="container main">
         <asp:ContentPlaceHolder ID="MainContent" runat="server" />
     </main>
 
-    <!-- FOOTER (thin + absolute bottom using flex layout) -->
     <footer class="footer">
         <div class="container footer-inner">
-            <small class="muted">© <%= DateTime.Now.Year %> Python Academy</small>
+            <small class="muted">&copy; <%= DateTime.Now.Year %> Python Academy</small>
         </div>
     </footer>
+    <canvas id="cursorTrail"></canvas>
+
+    <style>
+        /* --- Animated Top Nav Links --- */
+        .top-nav-link {
+            position: relative;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .top-nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0px;
+            left: 50%;
+            background: #00f3ff;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateX(-50%);
+            box-shadow: 0 0 8px #00f3ff;
+            border-radius: 2px;
+        }
+        .top-nav-link:hover {
+            color: #00f3ff;
+        }
+        .top-nav-link:hover::after {
+            width: 80%;
+        }
+        /* --- SIDEBAR CSS --- */
+        .hamburger-btn { background: none; border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-size: 1.1rem; cursor: pointer; padding: 8px 15px; border-radius: 8px; transition: 0.3s; margin-right: 15px; }
+        .hamburger-btn:hover { background: rgba(0, 243, 255, 0.1); border-color: #00f3ff; }
+
+        /* The invisible strip on the left edge */
+        #sidebarTriggerZone {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px; /* How close to the edge they have to get (20 pixels) */
+            height: 100vh;
+            z-index: 9997; /* Sits right underneath the sidebar */
+        }
+
+        #sidebarOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9998; opacity: 0; visibility: hidden; transition: 0.3s ease; backdrop-filter: blur(3px); }
+        #sidebarOverlay.active { opacity: 1; visibility: visible; }
+
+        .sidebar { position: fixed; top: 0; left: -320px; width: 280px; height: 100vh; background: rgba(11, 18, 32, 0.85); backdrop-filter: blur(15px); border-right: 1px solid rgba(255,255,255,0.1); z-index: 9999; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 10px 0 30px rgba(0,0,0,0.5); overflow-y: auto; }
+        .sidebar.open { left: 0; }
+
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: #8899ac; text-decoration: none; transition: 0.2s; }
+        .close-btn:hover { color: #ff4d4d; }
+
+        .sidebar-links { margin-top: 60px; display: flex; flex-direction: column; }
+        .side-link { 
+            padding: 15px 25px; 
+            color: #8899ac; 
+            text-decoration: none; 
+            font-size: 1.05rem;
+            border-left: 3px solid transparent; 
+            /* NEW: CodeDex bouncy transition */
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .side-link:hover { 
+            background: rgba(0, 243, 255, 0.05);
+            color: white; 
+            border-left: 3px solid #00f3ff; 
+            /* NEW: Slide to the right */
+            transform: translateX(8px);
+        }
+
+        .side-divider { padding: 25px 25px 5px 25px; font-size: 0.75rem; color: #556677; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 10px; }
+        html, body {
+            background: #060d1a !important;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 70% 55% at 50% 35%,
+                    rgba(0, 180, 255, 0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 80% 80%,
+                    rgba(0, 255, 136, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        #site-bg-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+        }
+
+        #cursorTrail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99999;
+        }
+
+    </style>
+
+    <script>
+        const canvas = document.getElementById("cursorTrail");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        const trail = [];
+        const trailLength = 20;
+
+        let mouseX = 0;
+        let mouseY = 0;
+
+        window.addEventListener("mousemove", (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            trail.push({ x: mouseX, y: mouseY });
+
+            if (trail.length > trailLength) {
+                trail.shift();
+            }
+
+            for (let i = 0; i < trail.length; i++) {
+                const point = trail[i];
+                const progress = i / trail.length;
+                const size = progress * 8;
+
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, size, 0, Math.PI * 2);
+                ctx.fillStyle = "#0b1220";
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = "#2f7dff";
+                ctx.fill();
+            }
+
+            requestAnimationFrame(animateCursor);
+        }
+
+        animateCursor();
+    </script>
 
 </div>
+<script>
+    // This keeps your button working for mobile/clicks
+    function toggleSidebar() {
+        var sidebar = document.getElementById("sideNav");
+        var overlay = document.getElementById("sidebarOverlay");
 
+        sidebar.classList.toggle("open");
+        overlay.classList.toggle("active");
+    }
+
+    // --- NEW: Hover Logic ---
+    // 1. Open when mouse hits the invisible left edge
+    document.getElementById("sidebarTriggerZone").addEventListener("mouseenter", function () {
+        document.getElementById("sideNav").classList.add("open");
+        document.getElementById("sidebarOverlay").classList.add("active");
+    });
+
+    // 2. Close when mouse completely leaves the sidebar panel
+    document.getElementById("sideNav").addEventListener("mouseleave", function () {
+        document.getElementById("sideNav").classList.remove("open");
+        document.getElementById("sidebarOverlay").classList.remove("active");
+    });
+</script>
 </form>
+    <canvas id="site-bg-canvas"></canvas>
+<script>
+    (function () {
+        var canvas = document.getElementById('site-bg-canvas');
+        var ctx = canvas.getContext('2d');
+        var W, H, dots;
+        var COUNT = 75, CONNECT_DIST = 150;
+        var COLOR = '0, 210, 255';
+
+        function resize() {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+        }
+        function makeDots() {
+            dots = [];
+            for (var i = 0; i < COUNT; i++) {
+                dots.push({
+                    x: Math.random() * W, y: Math.random() * H,
+                    vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
+                    r: Math.random() * 1.4 + 0.4
+                });
+            }
+        }
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            for (var i = 0; i < dots.length; i++) {
+                for (var j = i + 1; j < dots.length; j++) {
+                    var dx = dots[i].x - dots[j].x, dy = dots[i].y - dots[j].y;
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < CONNECT_DIST) {
+                        ctx.strokeStyle = 'rgba(' + COLOR + ',' + (1 - dist / CONNECT_DIST) * 0.18 + ')';
+                        ctx.lineWidth = 0.6;
+                        ctx.beginPath();
+                        ctx.moveTo(dots[i].x, dots[i].y);
+                        ctx.lineTo(dots[j].x, dots[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            dots.forEach(function (d) {
+                ctx.beginPath();
+                ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(' + COLOR + ', 0.55)';
+                ctx.fill();
+                d.x += d.vx;
+                d.y += d.vy;
+                if (d.x < 0 || d.x > W) d.vx *= -1;
+                if (d.y < 0 || d.y > H) d.vy *= -1;
+            });
+            requestAnimationFrame(draw);
+        }
+        resize();
+        makeDots();
+        draw();
+        window.addEventListener('resize', function () { resize(); makeDots(); });
+    })();
+</script>
 </body>
 </html>

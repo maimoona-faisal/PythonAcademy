@@ -31,10 +31,37 @@
         .stat-number {
             font-size: 3rem;
             font-weight: 800;
-            background: linear-gradient(45deg, var(--neon-blue), white);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--neon-blue);
+            text-shadow: 0 0 12px rgba(0, 243, 255, 0.35);
             margin-top: 10px;
+        }
+        .activity-log-container {
+            background: #050a15; 
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #00f3ff;
+            font-size: 0.85rem;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        .log-entry { margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 4px; }
+        .log-time { color: #8899ac; margin-right: 10px; }
+        .log-action { color: #bc13fe; font-weight: bold; margin-right: 10px; }
+
+        .blinking-cursor::after {
+            content: '_';
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .card-alert {
+            animation: pulse-alert 2s infinite;
+        }
+        @keyframes pulse-alert {
+            0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 193, 7, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
         }
     </style>
 
@@ -67,11 +94,11 @@
                 </div>
             </div>
 
-            <a href="Verification.aspx" class="glass-card" style="border-color: rgba(255, 193, 7, 0.5); cursor: pointer;">
+            <a href="Verification.aspx" class="glass-card card-alert" style="border-color: rgba(255, 193, 7, 0.5); cursor: pointer;">
                 <div style="display: flex; justify-content: space-between; color: #ffc107;">
                     <span>PENDING APPROVALS</span> <span style="font-size: 1.2rem;"></span>
                 </div>
-                <div class="stat-number" style="background: none; -webkit-text-fill-color: #ffc107;">
+                <div class="stat-number" style="color: #ffc107; text-shadow: 0 0 12px rgba(255, 193, 7, 0.35);">
                     <asp:Label ID="lblPending" runat="server" Text="0"></asp:Label>
                 </div>
                 <div style="color: #ffc107; font-size: 0.8rem; margin-top: 5px;">Tap to review requests &rarr;</div>
@@ -126,21 +153,17 @@
                 <span style="font-size: 0.8rem; color: #00f3ff; animation: pulse 2s infinite;">~ LIVE</span>
             </div>
 
-            <table class="tech-table">
-                <tbody>
-                    <asp:Repeater ID="rptRecentActivity" runat="server">
-                        <ItemTemplate>
-                            <tr>
-                                <td style="width: 80px; text-align: center; color: #8899ac; font-size: 0.8rem;">
-                                    <%# Eval("Timestamp", "{0:MMM dd, HH:mm}") %>
-                                </td>
-                                <td><strong style="color: #00f3ff;"><%# Eval("Action") %></strong></td>
-                                <td style="color: #8899ac;"><%# Eval("Details") %></td>
-                            </tr>
-                        </ItemTemplate>
-                    </asp:Repeater>
-                </tbody>
-            </table>
+           <div class="activity-log-container blinking-cursor">
+                <asp:Repeater ID="rptRecentActivity" runat="server">
+                    <ItemTemplate>
+                        <div class="log-entry">
+                            <span class="log-time">[<%# Eval("Timestamp", "{0:MMM dd, HH:mm}") %>]</span>
+                            <span class="log-action"><%# Eval("Action") %></span>
+                            <span class="log-details" style="color: #a9b8d6;"><%# Eval("Details") %></span>
+                        </div>
+                    </ItemTemplate>
+                </asp:Repeater>
+            </div>
         </div>
     </div>
 </asp:Content>

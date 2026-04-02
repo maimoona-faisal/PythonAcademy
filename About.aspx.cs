@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace PythonAcademy
 {
-    public partial class About : Page
+    // ===================================================================
+    // About.aspx.cs
+    // Purely informational page, no database connection required!
+    // ===================================================================
+    public partial class About : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            // Nothing needs to load here anymore! 
+            // The frontend handles all the beautiful styling.
         }
     }
 }

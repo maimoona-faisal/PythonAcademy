@@ -18,7 +18,6 @@
             padding: 30px; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
 
-        /* Form Inputs */
         .form-label {
             display: block; color: #8899ac; font-size: 0.85rem; 
             font-weight: bold; margin-bottom: 8px; text-transform: uppercase;
@@ -37,7 +36,6 @@
             resize: vertical; min-height: 150px; font-family: inherit;
         }
 
-        /* Broadcast Button */
         .btn-broadcast {
             background: linear-gradient(90deg, #7a0cd2, var(--neon-purple));
             color: white; border: none; padding: 15px 30px; width: 100%;
@@ -47,7 +45,6 @@
         }
         .btn-broadcast:hover { box-shadow: 0 0 25px rgba(188, 19, 254, 0.7); transform: translateY(-2px); }
 
-        /* Table Styles for History */
         .user-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
         .user-table th { text-align: left; padding: 15px; color: #8899ac; font-size: 0.85rem; text-transform: uppercase; }
         .user-table td { background: rgba(255,255,255,0.03); padding: 15px; color: white; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
@@ -55,11 +52,10 @@
         .user-table tr:first-child td:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
 
         .empty-state { text-align: center !important; color: #8899ac !important; padding: 40px !important; font-style: italic; border-left: none !important;}
-        
-        /* Layout Grid */
+
         .announcement-grid {
             display: grid;
-            grid-template-columns: 1fr 1.5fr; /* Left side smaller, right side larger */
+            grid-template-columns: 1fr 1.5fr; 
             gap: 30px;
         }
     </style>

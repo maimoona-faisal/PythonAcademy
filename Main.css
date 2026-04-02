@@ -185,3 +185,25 @@ a {
 	display: flex;
 	justify-content: center;
 }
+/* <-- You were missing this closing bracket right here! */
+
+/* --- Custom Neon Scrollbar --- */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--bg);
+	border-left: 1px solid var(--line);
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(0, 243, 255, 0.3);
+	border-radius: 10px;
+}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: var(--primary2);
+		box-shadow: 0 0 10px var(--primary2);
+	}

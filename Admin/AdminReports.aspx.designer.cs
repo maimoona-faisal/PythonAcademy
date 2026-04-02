@@ -17,91 +17,86 @@ namespace PythonAcademy.Admin
         /// <summary>
         /// btnExportCsv control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnExportCsv;
 
         /// <summary>
         /// lblMessage control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
         /// ddlReportType control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlReportType;
 
         /// <summary>
         /// txtStartDate control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtStartDate;
 
         /// <summary>
         /// txtEndDate control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtEndDate;
 
         /// <summary>
         /// btnGenerateReport control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnGenerateReport;
 
         /// <summary>
-        /// lblRegistrations control.
+        /// lblMetricOneTitle control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblRegistrations;
+        protected global::System.Web.UI.WebControls.Label lblMetricOneTitle;
 
         /// <summary>
-        /// lblUploads control.
+        /// lblMetricOneValue control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUploads;
+        protected global::System.Web.UI.WebControls.Label lblMetricOneValue;
 
         /// <summary>
-        /// lblActiveUsers control.
+        /// lblMetricOneCaption control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblActiveUsers;
+        protected global::System.Web.UI.WebControls.Label lblMetricOneCaption;
+
+        /// <summary>
+        /// lblMetricTwoTitle control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Label lblMetricTwoTitle;
+
+        /// <summary>
+        /// lblMetricTwoValue control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Label lblMetricTwoValue;
+
+        /// <summary>
+        /// lblMetricTwoCaption control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Label lblMetricTwoCaption;
+
+        /// <summary>
+        /// lblMetricThreeTitle control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Label lblMetricThreeTitle;
+
+        /// <summary>
+        /// lblMetricThreeValue control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Label lblMetricThreeValue;
+
+        /// <summary>
+        /// lblMetricThreeCaption control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Label lblMetricThreeCaption;
+
+        /// <summary>
+        /// lblReportSummary control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Label lblReportSummary;
 
         /// <summary>
         /// gvReportData control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvReportData;
     }
 }
